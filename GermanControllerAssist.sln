@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GCA", "GCA\GCA.vcxproj", "{DD169F60-25F1-4253-8B65-CB37673F4859}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DD169F60-25F1-4253-8B65-CB37673F4859}.Debug|x64.ActiveCfg = Debug|x64
+		{DD169F60-25F1-4253-8B65-CB37673F4859}.Debug|x64.Build.0 = Debug|x64
+		{DD169F60-25F1-4253-8B65-CB37673F4859}.Debug|x86.ActiveCfg = Debug|Win32
+		{DD169F60-25F1-4253-8B65-CB37673F4859}.Debug|x86.Build.0 = Debug|Win32
+		{DD169F60-25F1-4253-8B65-CB37673F4859}.Release|x64.ActiveCfg = Release|x64
+		{DD169F60-25F1-4253-8B65-CB37673F4859}.Release|x64.Build.0 = Release|x64
+		{DD169F60-25F1-4253-8B65-CB37673F4859}.Release|x86.ActiveCfg = Release|Win32
+		{DD169F60-25F1-4253-8B65-CB37673F4859}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C8A43833-10F3-461D-83F7-F1906E801233}
+	EndGlobalSection
+EndGlobal
