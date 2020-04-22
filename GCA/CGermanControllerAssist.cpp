@@ -19,19 +19,39 @@ CGermanControllerAssist::CGermanControllerAssist() : EuroScopePlugIn::CPlugIn(
 
 	assign_equipment_code = FALSE;
 	show_heavy_engines = FALSE;
-	if (GetDataFromSettings("assign_equipment_code") == NULL)
+	set_temp_alt = FALSE;
+	string assign_equipment_code_setting = "";
+	string show_heavy_engines_setting = "";
+	string set_temp_alt_setting = "";
+
+	if(GetDataFromSettings("assign_equipment_code") != NULL)
+		assign_equipment_code_setting = GetDataFromSettings("assign_equipment_code");
+	if (GetDataFromSettings("show_heavy_engines") != NULL)
+		show_heavy_engines_setting = GetDataFromSettings("show_heavy_engines");
+	if (GetDataFromSettings("set_temp_alt") != NULL)
+		set_temp_alt_setting = GetDataFromSettings("set_temp_alt");
+
+	if (assign_equipment_code_setting.empty())
 	{
 		SaveDataToSettings("assign_equipment_code", "assign_equipment_code", "off");
 	}
-	else if (GetDataFromSettings("assign_equipment_code") == "on")
+	else if (assign_equipment_code_setting.find("on") != string::npos)
 	{
 		assign_equipment_code = TRUE;
 	}
-	if (GetDataFromSettings("show_heavy_engines") == NULL)
+	if (show_heavy_engines_setting.empty())
 	{
 		SaveDataToSettings("show_heavy_engines", "show_heavy_engines", "off");
 	}
-	else if (GetDataFromSettings("show_heavy_engines") == "on")
+	else if (show_heavy_engines_setting.find("on") != string::npos)
+	{
+		show_heavy_engines = TRUE;
+	}
+	if (set_temp_alt_setting.empty())
+	{
+		SaveDataToSettings("set_temp_alt", "set_temp_alt", "off");
+	}
+	else if (set_temp_alt_setting.find("on") != string::npos)
 	{
 		show_heavy_engines = TRUE;
 	}
@@ -72,6 +92,83 @@ void CGermanControllerAssist::OnFunctionCall(int FunctionId, const char* sItemSt
 {
 }
 
+void CGermanControllerAssist::OnFlightPlanFlightPlanDataUpdate(CFlightPlan FlightPlan)
+{
+	CFlightPlanData flightPlanData = FlightPlan.GetFlightPlanData();
+	CFlightPlanControllerAssignedData controllerAssignedData = FlightPlan.GetControllerAssignedData();
+	int clearedFL = controllerAssignedData.GetClearedAltitude();
+	bool clearenceFlag = FlightPlan.GetClearenceFlag();
+	string sidName = flightPlanData.GetSidName();
+	string origin = flightPlanData.GetOrigin();
+	string destination = flightPlanData.GetDestination();
+	char rules = *flightPlanData.GetPlanType();
+
+	//ASSIGN /L
+	string ac_info = flightPlanData.GetAircraftInfo();
+	if (
+		assign_equipment_code &&
+		(ac_info.find("/L") == string::npos && (ac_info.length() == 4) || ac_info.find("/") == 1 && (ac_info.length() == 6))
+		)
+	{
+		ac_info.append("/L");
+		flightPlanData.SetAircraftInfo(ac_info.c_str());
+		flightPlanData.AmendFlightPlan();
+	}
+	// SET THE TEMP ALT
+	if ((clearedFL==0) && (!clearenceFlag) && (origin.find(destination) == string::npos)) {
+		if (rules == 'V')
+		{
+			return;
+		}
+		if (origin == "EDDS")
+		{
+			controllerAssignedData.SetClearedAltitude(5000);
+			return;
+		}
+		if (origin != "EDDF")
+		{
+			return;
+		}
+
+		if (sidName == "OBOKA1M"
+			|| sidName == "MARUN6M"
+			|| sidName == "TOBAK6M"
+			|| sidName == "OBOKA1H"
+			|| sidName == "MARUN4H"
+			|| sidName == "TOBAK4H"
+			)
+		{
+			controllerAssignedData.SetClearedAltitude(7000);
+			return;
+		}
+		if (sidName == "OBOKA1G"
+			|| sidName == "OBOKA1E"
+			|| sidName == "OBOKA1D"
+			|| sidName == "MARUN7G"
+			|| sidName == "MARUN5E"
+			|| sidName == "MARUN9D"
+			|| sidName == "TOBAK8G"
+			|| sidName == "TOBAK9D"
+			)
+		{
+			controllerAssignedData.SetClearedAltitude(5000);
+			return;
+		}
+		if (sidName == "SOBRA1L"
+			|| sidName == "ULKIG1L"
+			|| sidName == "ANEKI9L"
+			|| sidName == "CINDY1S"
+			|| sidName == "SULUS9S"
+			|| sidName == "SULUS1D"
+			)
+		{
+			controllerAssignedData.SetClearedAltitude(4000);
+			return;
+		}
+	}
+}
+
+
 bool CGermanControllerAssist::OnCompileCommand(const char* sCommandLine)
 {
 	string cmd = string(sCommandLine);
@@ -82,7 +179,6 @@ bool CGermanControllerAssist::OnCompileCommand(const char* sCommandLine)
 		{
 			SaveDataToSettings("assign_equipment_code", "assign_equipment_code", "on");
 			DisplayUserMessage(GetPlugInName(), "GermanControllerAssist", string("assign_equipment_code = on").c_str(), true, true, false, true, false);
-			DisplayUserMessage(GetPlugInName(), "GermanControllerAssist", string("Note you have to the \"Aircraft Type and Category (Advanced)\" item in your departure list").c_str(), true, true, false, true, false);
 		}
 		else
 		{
@@ -98,6 +194,7 @@ bool CGermanControllerAssist::OnCompileCommand(const char* sCommandLine)
 		{
 			SaveDataToSettings("show_heavy_engines", "show_heavy_engines", "on");
 			DisplayUserMessage(GetPlugInName(), "GermanControllerAssist", string("show_heavy_engines = on").c_str(), true, true, false, true, false);
+			DisplayUserMessage(GetPlugInName(), "GermanControllerAssist", string("Note you have to the \"Aircraft Type and Category (Advanced)\" item in your departure list").c_str(), true, true, false, true, false);
 		}
 		else
 		{
@@ -106,6 +203,22 @@ bool CGermanControllerAssist::OnCompileCommand(const char* sCommandLine)
 		}
 		return TRUE;
 	}
+	else if (cmd.find(".gca temp") != string::npos)
+	{
+		set_temp_alt = !set_temp_alt;
+		if (set_temp_alt)
+		{
+			SaveDataToSettings("set_temp_alt", "set_temp_alt", "on");
+			DisplayUserMessage(GetPlugInName(), "GermanControllerAssist", string("set_temp_alt = on").c_str(), true, true, false, true, false);
+		}
+		else
+		{
+			SaveDataToSettings("set_temp_alt", "set_temp_alt", "off");
+			DisplayUserMessage(GetPlugInName(), "GermanControllerAssist", string("set_temp_alt = off").c_str(), true, true, false, true, false);
+		}
+		return TRUE;
+	}
+	
 
 	return FALSE;
 }
@@ -122,16 +235,6 @@ string CGermanControllerAssist::getTagItemACTYPE(CFlightPlan FlightPlan)
 {
 	CFlightPlanData flightPlanData = FlightPlan.GetFlightPlanData();
 	string ac_info = flightPlanData.GetAircraftInfo();
-	if (
-		assign_equipment_code &&
-		(ac_info.find("/L") == string::npos && (ac_info.length() == 4) || ac_info.find("/") == 1 && (ac_info.length() == 6))
-		)
-	{
-		ac_info.append("/L");
-		flightPlanData.SetAircraftInfo(ac_info.c_str());
-		flightPlanData.AmendFlightPlan();
-	}
-	ac_info = flightPlanData.GetAircraftInfo();
 	if (ac_info.find("/") == 1
 		&& ac_info.length() > 3)
 	{
@@ -222,6 +325,7 @@ string CGermanControllerAssist::getTagItemSIDCLIMB(CFlightPlan FlightPlan)
 		|| sidName == "TOBAK4H"
 		)
 	{
+
 		return "FL70";
 	}
 	if (sidName == "OBOKA1G"

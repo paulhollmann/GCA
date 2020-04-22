@@ -10,7 +10,7 @@ using namespace std;
 using namespace EuroScopePlugIn;
 
 const string MY_PLUGIN_NAME = "GCA";
-const string MY_PLUGIN_VERSION = "20w03b (Alpha)";
+const string MY_PLUGIN_VERSION = "20w17d (Alpha)";
 const string MY_PLUGIN_DEVELOPER = "Paul Hollmann";
 const string MY_PLUGIN_COPYRIGHT = "(c)2019-2020";
 
@@ -31,6 +31,7 @@ private:
 	//variables
 	bool assign_equipment_code;
 	bool show_heavy_engines;
+	bool set_temp_alt;
 
 
 public:
@@ -40,6 +41,7 @@ public:
 	//functions
 	void OnGetTagItem(CFlightPlan FlightPlan, CRadarTarget RadarTarget, int ItemCode, int TagData, char sItemString[16], int* pColorCode, COLORREF* pRGB, double* pFontSize);
 	void OnFunctionCall(int FunctionId, const char* sItemString, POINT Pt, RECT Area);
+	void OnFlightPlanFlightPlanDataUpdate(CFlightPlan FlightPlan);
 	bool OnCompileCommand(const char* sCommandLine);
 
 };
