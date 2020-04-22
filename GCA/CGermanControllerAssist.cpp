@@ -115,7 +115,11 @@ void CGermanControllerAssist::OnFlightPlanFlightPlanDataUpdate(CFlightPlan Fligh
 		flightPlanData.AmendFlightPlan();
 	}
 	// SET THE TEMP ALT
-	if ((clearedFL==0) && (!clearenceFlag) && (origin.find(destination) == string::npos)) {
+	if (
+		(set_temp_alt) &&
+		(clearedFL==0) && 
+		(!clearenceFlag) && 
+		(origin.find(destination) == string::npos)) {
 		if (rules == 'V')
 		{
 			return;
@@ -194,7 +198,7 @@ bool CGermanControllerAssist::OnCompileCommand(const char* sCommandLine)
 		{
 			SaveDataToSettings("show_heavy_engines", "show_heavy_engines", "on");
 			DisplayUserMessage(GetPlugInName(), "GermanControllerAssist", string("show_heavy_engines = on").c_str(), true, true, false, true, false);
-			DisplayUserMessage(GetPlugInName(), "GermanControllerAssist", string("Note you have to the \"Aircraft Type and Category (Advanced)\" item in your departure list").c_str(), true, true, false, true, false);
+			DisplayUserMessage(GetPlugInName(), "GermanControllerAssist", string("Note you have to add the \"Aircraft Type and Category (Advanced)\" item in your departure list").c_str(), true, true, false, true, false);
 		}
 		else
 		{
