@@ -53,7 +53,7 @@ CGermanControllerAssist::CGermanControllerAssist() : EuroScopePlugIn::CPlugIn(
 	}
 	else if (set_temp_alt_setting.find("on") != string::npos)
 	{
-		show_heavy_engines = TRUE;
+		set_temp_alt = TRUE;
 	}
 
 	DisplayUserMessage("Message", "GermanControllerAssist (GCA)", string("Version " + MY_PLUGIN_VERSION + " loaded").c_str(), false, false, false, false, false);
@@ -96,13 +96,22 @@ void CGermanControllerAssist::OnFlightPlanFlightPlanDataUpdate(CFlightPlan Fligh
 {
 	CFlightPlanData flightPlanData = FlightPlan.GetFlightPlanData();
 	CFlightPlanControllerAssignedData controllerAssignedData = FlightPlan.GetControllerAssignedData();
+	CRadarTargetPositionData radarTargetPositionData = FlightPlan.GetFPTrackPosition();
+	CPosition acposition = radarTargetPositionData.GetPosition();
+	CController controller = ControllerMyself();
+	CPosition myposition = controller.GetPosition();
+
+	
+	string callsign = FlightPlan.GetCallsign();
 	int clearedFL = controllerAssignedData.GetClearedAltitude();
+	int currentAlt = radarTargetPositionData.GetPressureAltitude();
 	bool clearenceFlag = FlightPlan.GetClearenceFlag();
 	string sidName = flightPlanData.GetSidName();
 	string origin = flightPlanData.GetOrigin();
 	string destination = flightPlanData.GetDestination();
 	char rules = *flightPlanData.GetPlanType();
-
+	
+	
 	//ASSIGN /L
 	string ac_info = flightPlanData.GetAircraftInfo();
 	if (
@@ -116,56 +125,75 @@ void CGermanControllerAssist::OnFlightPlanFlightPlanDataUpdate(CFlightPlan Fligh
 	}
 	// SET THE TEMP ALT
 	if (
-		(set_temp_alt) &&
-		(clearedFL==0) && 
-		(!clearenceFlag) && 
-		(origin.find(destination) == string::npos)) {
+		set_temp_alt &&
+		clearedFL == 0 && 
+		!clearenceFlag && 
+		(origin.find(destination) == string::npos) &&
+		myposition.DistanceTo(acposition) < 10
+		) {
 		if (rules == 'V')
 		{
 			return;
 		}
-		if (origin == "EDDS")
-		{
+		if (origin.find("EDDS") != string::npos && currentAlt < 1400 && currentAlt != 0)
+		{	
+			string message = callsign;
+			message = message.append(" at ");
+			message = message.append(std::to_string(currentAlt));
+			message = message.append("ft in EDDS:  set from ");
+			message = message.append(std::to_string(clearedFL));
+			message = message.append(" to 5000ft");
+			DisplayUserMessage(GetPlugInName(), "GCA_temp", message.c_str(), true, false, false, true, false);
 			controllerAssignedData.SetClearedAltitude(5000);
 			return;
 		}
-		if (origin != "EDDF")
+		if (origin.find("EDDF") == string::npos || currentAlt > 400 || currentAlt==0)
 		{
 			return;
 		}
-
-		if (sidName == "OBOKA1M"
-			|| sidName == "MARUN6M"
-			|| sidName == "TOBAK6M"
-			|| sidName == "OBOKA1H"
-			|| sidName == "MARUN4H"
-			|| sidName == "TOBAK4H"
+		string message = callsign;
+		message = message.append(" at ");
+		message = message.append(std::to_string(currentAlt));
+		message = message.append("ft in EDDF, via ");
+		message = message.append(sidName);
+		message = message.append(" set from ");
+		message = message.append(std::to_string(clearedFL));
+		message = message.append(" to ");
+		if (sidName.find("OBOKA1M") != string::npos
+			|| sidName.find("MARUN6M") != string::npos
+			|| sidName.find("TOBAK6M") != string::npos
+			|| sidName.find("OBOKA1H") != string::npos
+			|| sidName.find("MARUN4H") != string::npos
+			|| sidName.find("TOBAK4H") != string::npos
 			)
 		{
+			DisplayUserMessage(GetPlugInName(), "GCA_temp", message.append("FL70").c_str(), true, false, false, true, false);
 			controllerAssignedData.SetClearedAltitude(7000);
 			return;
 		}
-		if (sidName == "OBOKA1G"
-			|| sidName == "OBOKA1E"
-			|| sidName == "OBOKA1D"
-			|| sidName == "MARUN7G"
-			|| sidName == "MARUN5E"
-			|| sidName == "MARUN9D"
-			|| sidName == "TOBAK8G"
-			|| sidName == "TOBAK9D"
+		if (sidName.find("OBOKA1G") != string::npos
+			|| sidName.find("OBOKA1E") != string::npos
+			|| sidName.find("OBOKA1D") != string::npos
+			|| sidName.find("MARUN7G") != string::npos
+			|| sidName.find("MARUN5E") != string::npos
+			|| sidName.find("MARUN9D") != string::npos
+			|| sidName.find("TOBAK8G") != string::npos
+			|| sidName.find("TOBAK9D") != string::npos
 			)
 		{
+			DisplayUserMessage(GetPlugInName(), "GCA_temp", message.append("5000ft").c_str(), true, false, false, true, false);
 			controllerAssignedData.SetClearedAltitude(5000);
 			return;
 		}
-		if (sidName == "SOBRA1L"
-			|| sidName == "ULKIG1L"
-			|| sidName == "ANEKI9L"
-			|| sidName == "CINDY1S"
-			|| sidName == "SULUS9S"
-			|| sidName == "SULUS1D"
+		if (sidName.find("SOBRA1L") != string::npos
+			|| sidName.find("ULKIG1L") != string::npos
+			|| sidName.find("ANEKI9L") != string::npos
+			|| sidName.find("CINDY1S") != string::npos
+			|| sidName.find("SULUS9S") != string::npos
+			|| sidName.find("SULUS1D") != string::npos
 			)
 		{
+			DisplayUserMessage(GetPlugInName(), "GCA_temp", message.append("4000ft").c_str(), true, false, false, true, false);
 			controllerAssignedData.SetClearedAltitude(4000);
 			return;
 		}
@@ -183,6 +211,9 @@ bool CGermanControllerAssist::OnCompileCommand(const char* sCommandLine)
 		{
 			SaveDataToSettings("assign_equipment_code", "assign_equipment_code", "on");
 			DisplayUserMessage(GetPlugInName(), "GermanControllerAssist", string("assign_equipment_code = on").c_str(), true, true, false, true, false);
+			DisplayUserMessage(GetPlugInName(), "GermanControllerAssist", string("NOTE this setting will amend the flightplan, pilots will not be able resend a new one, until they logoff").c_str(), true, true, false, true, true);
+			DisplayUserMessage(GetPlugInName(), "GermanControllerAssist", string("To turn the setting off type '.gca eqcode' again").c_str(), true, true, false, true, false);
+			
 		}
 		else
 		{
