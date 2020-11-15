@@ -204,11 +204,11 @@ void CGermanControllerAssist::OnFlightPlanFlightPlanDataUpdate(CFlightPlan Fligh
 		if (sidName.find("OBOKA1G") != string::npos
 			|| sidName.find("OBOKA1E") != string::npos
 			|| sidName.find("OBOKA1D") != string::npos
-			|| sidName.find("MARUN8G") != string::npos
+			|| sidName.find("MARUN9G") != string::npos
 			|| sidName.find("MARUN6F") != string::npos
 			|| sidName.find("MARUN5E") != string::npos
 			|| sidName.find("MARUN9D") != string::npos
-			|| sidName.find("TOBAK9G") != string::npos
+			|| sidName.find("TOBAK1G") != string::npos
 			|| sidName.find("TOBAK7F") != string::npos
 			|| sidName.find("TOBAK9D") != string::npos
 			|| sidName.find("SULUS1F") != string::npos
@@ -221,13 +221,20 @@ void CGermanControllerAssist::OnFlightPlanFlightPlanDataUpdate(CFlightPlan Fligh
 			controllerAssignedData.SetClearedAltitude(5000);
 			return;
 		}
-		if (sidName.find("SOBRA1L") != string::npos
+		if (sidName.find("SOBRA9L") != string::npos
 			|| sidName.find("SOBRA1U") != string::npos
 			|| sidName.find("ULKIG1L") != string::npos
 			|| sidName.find("ANEKI9L") != string::npos
-			|| sidName.find("CINDY1S") != string::npos
-			|| sidName.find("SULUS9S") != string::npos
+			|| sidName.find("CINDY2S") != string::npos
+			|| sidName.find("SULUS1S") != string::npos
 			|| sidName.find("SULUS1D") != string::npos
+			|| sidName.find("OBOKA1T") != string::npos
+			|| sidName.find("MARUN4T") != string::npos
+			|| sidName.find("TOBAK6T") != string::npos
+			|| sidName.find("OBOKA1R") != string::npos
+			|| sidName.find("MARUN3R") != string::npos
+			|| sidName.find("TOBAK3R") != string::npos
+			|| sidName.find("OBOKA1L") != string::npos
 			)
 		{
 			DisplayUserMessage(GetPlugInName(), "GCA_temp", message.append("4000ft").c_str(), true, false, false, true, false);
@@ -414,10 +421,10 @@ string CGermanControllerAssist::getTagItemSIDCLIMB(CFlightPlan FlightPlan)
 
 		return "FL70";
 	}
-	if (sidName == "OBOKA1G"
+	if (sidName == "OBOKA2G"
 		|| sidName == "OBOKA1E"
 		|| sidName == "OBOKA1D"
-		|| sidName == "MARUN8G"
+		|| sidName == "MARUN9G"
 		|| sidName == "MARUN6F"
 		|| sidName == "MARUN5E"
 		|| sidName == "MARUN9D"
@@ -436,17 +443,21 @@ string CGermanControllerAssist::getTagItemSIDCLIMB(CFlightPlan FlightPlan)
 	{
 		return "5000";
 	}
-	if (sidName == "SOBRA1L"
+	if (sidName == "SOBRA9L"
 		|| sidName == "SOBRA1U"
 		|| sidName == "ULKIG1L"
 		|| sidName == "ANEKI9L"
 		|| sidName == "ANEKI2A"
-		|| sidName == "CINDY1S"
-		|| sidName == "SULUS9S"
+		|| sidName == "CINDY2S"
+		|| sidName == "SULUS1S"
 		|| sidName == "SULUS1D"
 		|| sidName == "OBOKA1R"
 		|| sidName == "MARUN3R"
 		|| sidName == "TOBAK3R"
+		|| sidName == "OBOKA1T"
+		|| sidName == "MARUN4T"
+		|| sidName == "TOBAK6T"
+		|| sidName == "OBOKA1L"
 		)
 	{
 		return "4000";
