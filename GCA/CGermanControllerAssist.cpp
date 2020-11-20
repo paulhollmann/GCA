@@ -221,13 +221,20 @@ void CGermanControllerAssist::OnFlightPlanFlightPlanDataUpdate(CFlightPlan Fligh
 			controllerAssignedData.SetClearedAltitude(5000);
 			return;
 		}
-		if (sidName.find("SOBRA9L") != string::npos
+		if (sidName.find("SOBRA1L") != string::npos
 			|| sidName.find("SOBRA1U") != string::npos
+			|| sidName.find("SOBRA1X") != string::npos
+			|| sidName.find("SOBRA1Y") != string::npos
 			|| sidName.find("ULKIG1L") != string::npos
 			|| sidName.find("ANEKI9L") != string::npos
+			|| sidName.find("ANEKI1X") != string::npos
+			|| sidName.find("ANEKI1Y") != string::npos
 			|| sidName.find("CINDY2S") != string::npos
+			|| sidName.find("CINDY1X") != string::npos
+			|| sidName.find("CINDY1Y") != string::npos
 			|| sidName.find("SULUS1S") != string::npos
 			|| sidName.find("SULUS1D") != string::npos
+			|| sidName.find("SULUS9L") != string::npos
 			|| sidName.find("OBOKA1T") != string::npos
 			|| sidName.find("MARUN4T") != string::npos
 			|| sidName.find("TOBAK6T") != string::npos
@@ -443,14 +450,21 @@ string CGermanControllerAssist::getTagItemSIDCLIMB(CFlightPlan FlightPlan)
 	{
 		return "5000";
 	}
-	if (sidName == "SOBRA9L"
+	if (sidName == "SOBRA1L"
 		|| sidName == "SOBRA1U"
+		|| sidName == "SOBRA1X"
+		|| sidName == "SOBRA1Y"
 		|| sidName == "ULKIG1L"
 		|| sidName == "ANEKI9L"
 		|| sidName == "ANEKI2A"
+		|| sidName == "ANEKI1X"
+		|| sidName == "ANEKI1Y"
 		|| sidName == "CINDY2S"
+		|| sidName == "CINDY1X"
+		|| sidName == "CINDY1Y"
 		|| sidName == "SULUS1S"
 		|| sidName == "SULUS1D"
+		|| sidName == "SULUS9L"
 		|| sidName == "OBOKA1R"
 		|| sidName == "MARUN3R"
 		|| sidName == "TOBAK3R"
