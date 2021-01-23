@@ -1,6 +1,13 @@
 #include "stdafx.h"
 #include "CGermanControllerAssist.h"
 
+#include <fstream>
+
+
+#include <direct.h>
+#include <limits.h>
+#include <iostream>
+
 
 
 using namespace std;
@@ -15,7 +22,7 @@ CGermanControllerAssist::CGermanControllerAssist() : EuroScopePlugIn::CPlugIn(
 	RegisterTagItemType("SID Initial Climb", TAG_ITEM_GCA_SIDCLIMB);
 	RegisterTagItemType("SID and Runway (Departures only)", TAG_ITEM_GCA_SIDRWY);
 	RegisterTagItemType("Aircraft Type and Category (Advanced)", TAG_ITEM_GCA_ACTYPE);
-
+	RegisterTagItemType("Event Route Check", TAG_ITEM_GCA_CHECKEVENTROUTE);
 
 	assign_equipment_code = FALSE;
 	show_heavy_engines = FALSE;
@@ -57,6 +64,7 @@ CGermanControllerAssist::CGermanControllerAssist() : EuroScopePlugIn::CPlugIn(
 	}
 
 	DisplayUserMessage("Message", "GermanControllerAssist (GCA)", string("Version " + MY_PLUGIN_VERSION + " loaded").c_str(), false, false, false, false, false);
+	loadEventRoutes();
 }
 
 CGermanControllerAssist::~CGermanControllerAssist()
@@ -67,7 +75,6 @@ CGermanControllerAssist::~CGermanControllerAssist()
 void CGermanControllerAssist::OnGetTagItem(CFlightPlan FlightPlan, CRadarTarget RadarTarget, int ItemCode, int TagData, char sItemString[16], int* pColorCode, COLORREF* pRGB, double* pFontSize)
 {
 	string tagstring;
-
 	switch (ItemCode) {
 	case TAG_ITEM_GCA_SIDCLIMB:
 		tagstring = getTagItemSIDCLIMB(FlightPlan);
@@ -77,6 +84,9 @@ void CGermanControllerAssist::OnGetTagItem(CFlightPlan FlightPlan, CRadarTarget 
 		break;
 	case TAG_ITEM_GCA_ACTYPE:
 		tagstring = getTagItemACTYPE(FlightPlan);
+		break;
+	case TAG_ITEM_GCA_CHECKEVENTROUTE:
+		tagstring = getTagItemCHECKEVENTROUTE(FlightPlan, pColorCode, pRGB);
 		break;
 	default:
 		tagstring = "";
@@ -304,6 +314,11 @@ bool CGermanControllerAssist::OnCompileCommand(const char* sCommandLine)
 		}
 		return TRUE;
 	}
+	else if (cmd.find(".gca load event") != string::npos)
+	{
+		loadEventRoutes();
+		return TRUE;
+	}
 	
 
 	return FALSE;
@@ -335,6 +350,45 @@ string CGermanControllerAssist::getTagItemACTYPE(CFlightPlan FlightPlan)
 	}
 	ac_info.append(string(1, flightPlanData.GetAircraftWtc()));
 	return ac_info;
+}
+
+string CGermanControllerAssist::getTagItemCHECKEVENTROUTE(CFlightPlan FlightPlan, int* pColorCode, COLORREF* pRGB)
+{
+	int state = gca::EventRoute::FP_NO_EVENT;
+	for (size_t i = 0; i < eventRoutes.size(); i++)
+	{
+		int check = eventRoutes.at(i).matchFP(FlightPlan);
+		if(check == gca::EventRoute::FP_VALID_EVENT)
+			state = gca::EventRoute::FP_VALID_EVENT;
+		if (check == gca::EventRoute::FP_INVAID_EVENT && state != gca::EventRoute::FP_VALID_EVENT)
+			state = gca::EventRoute::FP_INVAID_EVENT;
+	}
+	if (state == gca::EventRoute::FP_NO_EVENT) return "FP_NO_EVENT";
+	if (state == gca::EventRoute::FP_INVAID_EVENT) return "FP_INVAID_EVENT";
+	if (state == gca::EventRoute::FP_VALID_EVENT) return "FP_VALID_EVENT";
+	return "?";
+}
+
+void CGermanControllerAssist::loadEventRoutes()
+{
+	eventRoutes.clear();
+	std::ifstream file("eventroutes.txt");
+	if (file.is_open()) {
+		std::string line;
+		while (std::getline(file, line)) {
+			if (line.empty()) continue;
+			//if (line.find(':') != 2) continue;
+
+			for (auto& c : line) c = toupper(c);
+
+			
+			gca::EventRoute route = gca::EventRoute(line.substr(0, 4), line.substr(5, 4), line.substr(10, line.size() - 10));
+			DisplayUserMessage(GetPlugInName(), "GermanControllerAssist", string(route.origin + "->" + route.destination + " via " + route.route).c_str(), true, true, false, true, false);
+			eventRoutes.push_back(route);
+			
+		}
+		file.close();
+	}
 }
 
 
@@ -479,3 +533,5 @@ string CGermanControllerAssist::getTagItemSIDCLIMB(CFlightPlan FlightPlan)
 	return "!";
 
 }
+
+

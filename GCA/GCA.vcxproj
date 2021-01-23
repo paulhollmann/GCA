@@ -32,7 +32,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
-    <UseOfMfc>Dynamic</UseOfMfc>
+    <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -40,7 +40,7 @@
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
-    <UseOfMfc>Dynamic</UseOfMfc>
+    <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -181,6 +181,7 @@
     <ClInclude Include="CGermanControllerAssist.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GermanControllerAssist.h" />
+    <ClInclude Include="GCATypes.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -189,6 +190,7 @@
     <ClCompile Include="CGermanControllerAssist.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="GermanControllerAssist.cpp" />
+    <ClCompile Include="GCATypes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GermanControllerAssist.rc" />
