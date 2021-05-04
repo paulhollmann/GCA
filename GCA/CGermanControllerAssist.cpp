@@ -216,7 +216,7 @@ void CGermanControllerAssist::OnFlightPlanFlightPlanDataUpdate(CFlightPlan Fligh
 			message = message.append(std::to_string(clearedFL));
 			message = message.append(" to 4000ft");
 			DisplayUserMessage(GetPlugInName(), "GCA_temp", message.c_str(), true, false, false, true, false);
-			controllerAssignedData.SetClearedAltitude(5000);
+			controllerAssignedData.SetClearedAltitude(4000);
 			return;
 		}
 		if (origin.find("EDLN") != string::npos && currentAlt < 1400 && currentAlt != 0)
@@ -228,7 +228,7 @@ void CGermanControllerAssist::OnFlightPlanFlightPlanDataUpdate(CFlightPlan Fligh
 			message = message.append(std::to_string(clearedFL));
 			message = message.append(" to 2000ft");
 			DisplayUserMessage(GetPlugInName(), "GCA_temp", message.c_str(), true, false, false, true, false);
-			controllerAssignedData.SetClearedAltitude(5000);
+			controllerAssignedData.SetClearedAltitude(2000);
 			return;
 		}
 		if (origin.find("EDDC") != string::npos && currentAlt < 1400 && currentAlt != 0)
@@ -240,7 +240,7 @@ void CGermanControllerAssist::OnFlightPlanFlightPlanDataUpdate(CFlightPlan Fligh
 			message = message.append(std::to_string(clearedFL));
 			message = message.append(" to FL70");
 			DisplayUserMessage(GetPlugInName(), "GCA_temp", message.c_str(), true, false, false, true, false);
-			controllerAssignedData.SetClearedAltitude(5000);
+			controllerAssignedData.SetClearedAltitude(7000);
 			return;
 		}
 		if (origin.find("EDDP") != string::npos && currentAlt < 1400 && currentAlt != 0)
@@ -252,7 +252,7 @@ void CGermanControllerAssist::OnFlightPlanFlightPlanDataUpdate(CFlightPlan Fligh
 			message = message.append(std::to_string(clearedFL));
 			message = message.append(" to FL70");
 			DisplayUserMessage(GetPlugInName(), "GCA_temp", message.c_str(), true, false, false, true, false);
-			controllerAssignedData.SetClearedAltitude(5000);
+			controllerAssignedData.SetClearedAltitude(7000);
 			return;
 		}
 		if (origin.find("EDDF") == string::npos || currentAlt > 400 || currentAlt==0)

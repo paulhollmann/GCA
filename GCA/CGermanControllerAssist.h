@@ -10,10 +10,10 @@ using namespace std;
 using namespace EuroScopePlugIn;
 
 const string MY_PLUGIN_NAME = "GCA";
-const string MY_PLUGIN_VERSION = "20w47b (Alpha)";
+const string MY_PLUGIN_VERSION = "21w03r2(Alpha)";
 
 const string MY_PLUGIN_DEVELOPER = "Paul Hollmann, Paul à Brassard";
-const string MY_PLUGIN_COPYRIGHT = "(c)2019-2020";
+const string MY_PLUGIN_COPYRIGHT = "(c)2019-2021";
 
 const int TAG_ITEM_GCA_SIDCLIMB = 200;
 const int TAG_FUNC_GCA_SIDCLIMB_MENU = 201;
