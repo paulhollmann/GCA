@@ -159,6 +159,42 @@ void CGermanControllerAssist::OnFlightPlanFlightPlanDataUpdate(CFlightPlan Fligh
 			controllerAssignedData.SetClearedAltitude(5000);
 			return;
 		}
+		if (origin.find("EDDG") != string::npos && currentAlt < 1400 && currentAlt != 0)
+		{
+			string message = callsign;
+			message = message.append(" at ");
+			message = message.append(std::to_string(currentAlt));
+			message = message.append("ft in EDDG:  set from ");
+			message = message.append(std::to_string(clearedFL));
+			message = message.append(" to 5000ft");
+			DisplayUserMessage(GetPlugInName(), "GCA_temp", message.c_str(), true, false, false, true, false);
+			controllerAssignedData.SetClearedAltitude(5000);
+			return;
+		}
+		if (origin.find("EDLW") != string::npos && currentAlt < 1400 && currentAlt != 0)
+		{
+			string message = callsign;
+			message = message.append(" at ");
+			message = message.append(std::to_string(currentAlt));
+			message = message.append("ft in EDLW:  set from ");
+			message = message.append(std::to_string(clearedFL));
+			message = message.append(" to 5000ft");
+			DisplayUserMessage(GetPlugInName(), "GCA_temp", message.c_str(), true, false, false, true, false);
+			controllerAssignedData.SetClearedAltitude(5000);
+			return;
+		}
+		if (origin.find("EDDH") != string::npos && currentAlt < 1400 && currentAlt != 0)
+		{
+			string message = callsign;
+			message = message.append(" at ");
+			message = message.append(std::to_string(currentAlt));
+			message = message.append("ft in EDDH:  set from ");
+			message = message.append(std::to_string(clearedFL));
+			message = message.append(" to 5000ft");
+			DisplayUserMessage(GetPlugInName(), "GCA_temp", message.c_str(), true, false, false, true, false);
+			controllerAssignedData.SetClearedAltitude(5000);
+			return;
+		}
 		if (origin.find("EDDL") != string::npos && currentAlt < 1400 && currentAlt != 0)
 		{
 			string message = callsign;
@@ -167,6 +203,54 @@ void CGermanControllerAssist::OnFlightPlanFlightPlanDataUpdate(CFlightPlan Fligh
 			message = message.append("ft in EDDL:  set from ");
 			message = message.append(std::to_string(clearedFL));
 			message = message.append(" to 5000ft");
+			DisplayUserMessage(GetPlugInName(), "GCA_temp", message.c_str(), true, false, false, true, false);
+			controllerAssignedData.SetClearedAltitude(5000);
+			return;
+		}
+		if (origin.find("EDDW") != string::npos && currentAlt < 1400 && currentAlt != 0)
+		{
+			string message = callsign;
+			message = message.append(" at ");
+			message = message.append(std::to_string(currentAlt));
+			message = message.append("ft in EDDW:  set from ");
+			message = message.append(std::to_string(clearedFL));
+			message = message.append(" to 4000ft");
+			DisplayUserMessage(GetPlugInName(), "GCA_temp", message.c_str(), true, false, false, true, false);
+			controllerAssignedData.SetClearedAltitude(5000);
+			return;
+		}
+		if (origin.find("EDLN") != string::npos && currentAlt < 1400 && currentAlt != 0)
+		{
+			string message = callsign;
+			message = message.append(" at ");
+			message = message.append(std::to_string(currentAlt));
+			message = message.append("ft in EDLN:  set from ");
+			message = message.append(std::to_string(clearedFL));
+			message = message.append(" to 2000ft");
+			DisplayUserMessage(GetPlugInName(), "GCA_temp", message.c_str(), true, false, false, true, false);
+			controllerAssignedData.SetClearedAltitude(5000);
+			return;
+		}
+		if (origin.find("EDDC") != string::npos && currentAlt < 1400 && currentAlt != 0)
+		{
+			string message = callsign;
+			message = message.append(" at ");
+			message = message.append(std::to_string(currentAlt));
+			message = message.append("ft in EDDC:  set from ");
+			message = message.append(std::to_string(clearedFL));
+			message = message.append(" to FL70");
+			DisplayUserMessage(GetPlugInName(), "GCA_temp", message.c_str(), true, false, false, true, false);
+			controllerAssignedData.SetClearedAltitude(5000);
+			return;
+		}
+		if (origin.find("EDDP") != string::npos && currentAlt < 1400 && currentAlt != 0)
+		{
+			string message = callsign;
+			message = message.append(" at ");
+			message = message.append(std::to_string(currentAlt));
+			message = message.append("ft in EDDP:  set from ");
+			message = message.append(std::to_string(clearedFL));
+			message = message.append(" to FL70");
 			DisplayUserMessage(GetPlugInName(), "GCA_temp", message.c_str(), true, false, false, true, false);
 			controllerAssignedData.SetClearedAltitude(5000);
 			return;
@@ -184,14 +268,14 @@ void CGermanControllerAssist::OnFlightPlanFlightPlanDataUpdate(CFlightPlan Fligh
 		message = message.append(std::to_string(clearedFL));
 		message = message.append(" to ");
 		if (sidName.find("OBOKA1M") != string::npos
-			|| sidName.find("MARUN6M") != string::npos
 			|| sidName.find("TOBAK6M") != string::npos
-			|| sidName.find("OBOKA1H") != string::npos
-			|| sidName.find("MARUN4H") != string::npos
-			|| sidName.find("TOBAK4H") != string::npos
+			|| sidName.find("MARUN6M") != string::npos
 			|| sidName.find("OBOKA2W") != string::npos
 			|| sidName.find("MARUN2W") != string::npos
 			|| sidName.find("TOBAK2W") != string::npos
+			|| sidName.find("TOBAK4H") != string::npos
+			|| sidName.find("OBOKA1H") != string::npos
+			|| sidName.find("MARUN4H") != string::npos
 			|| sidName.find("OBOKA2K") != string::npos
 			|| sidName.find("MARUN2K") != string::npos
 			|| sidName.find("TOBAK2K") != string::npos
@@ -201,20 +285,26 @@ void CGermanControllerAssist::OnFlightPlanFlightPlanDataUpdate(CFlightPlan Fligh
 			controllerAssignedData.SetClearedAltitude(7000);
 			return;
 		}
-		if (sidName.find("OBOKA1G") != string::npos
-			|| sidName.find("OBOKA1E") != string::npos
-			|| sidName.find("OBOKA1D") != string::npos
+		if (sidName.find("OBOKA2G") != string::npos
 			|| sidName.find("MARUN9G") != string::npos
-			|| sidName.find("MARUN6F") != string::npos
-			|| sidName.find("MARUN5E") != string::npos
-			|| sidName.find("MARUN9D") != string::npos
 			|| sidName.find("TOBAK1G") != string::npos
+			|| sidName.find("MARUN6F") != string::npos
 			|| sidName.find("TOBAK7F") != string::npos
-			|| sidName.find("TOBAK9D") != string::npos
 			|| sidName.find("SULUS1F") != string::npos
 			|| sidName.find("CINDY1F") != string::npos
 			|| sidName.find("SOBRA6F") != string::npos
 			|| sidName.find("ANEKI9F") != string::npos
+			|| sidName.find("OBOKA1E") != string::npos
+			|| sidName.find("MARUN5E") != string::npos
+			|| sidName.find("MARUN9D") != string::npos
+			|| sidName.find("TOBAK9D") != string::npos
+			|| sidName.find("OBOKA1D") != string::npos
+
+			|| sidName.find("OBOKA4N") != string::npos
+			|| sidName.find("MARUN9N") != string::npos
+			|| sidName.find("SOBRA7N") != string::npos
+			|| sidName.find("TOBAK2N") != string::npos
+			|| sidName.find("SOBRA5P") != string::npos
 			)
 		{
 			DisplayUserMessage(GetPlugInName(), "GCA_temp", message.append("5000ft").c_str(), true, false, false, true, false);
@@ -229,10 +319,10 @@ void CGermanControllerAssist::OnFlightPlanFlightPlanDataUpdate(CFlightPlan Fligh
 			|| sidName.find("ANEKI9L") != string::npos
 			|| sidName.find("ANEKI1X") != string::npos
 			|| sidName.find("ANEKI1Y") != string::npos
-			|| sidName.find("CINDY2S") != string::npos
+			|| sidName.find("CINDY3S") != string::npos
 			|| sidName.find("CINDY1X") != string::npos
 			|| sidName.find("CINDY1Y") != string::npos
-			|| sidName.find("SULUS1S") != string::npos
+			|| sidName.find("SULUS2S") != string::npos
 			|| sidName.find("SULUS1D") != string::npos
 			|| sidName.find("SULUS9L") != string::npos
 			|| sidName.find("OBOKA1T") != string::npos
@@ -242,6 +332,15 @@ void CGermanControllerAssist::OnFlightPlanFlightPlanDataUpdate(CFlightPlan Fligh
 			|| sidName.find("MARUN3R") != string::npos
 			|| sidName.find("TOBAK3R") != string::npos
 			|| sidName.find("OBOKA1L") != string::npos
+			|| sidName.find("SOBRA6E") != string::npos
+			|| sidName.find("ANEKI4E") != string::npos
+			|| sidName.find("KOMIB3D") != string::npos
+			|| sidName.find("CINDY1A") != string::npos
+			|| sidName.find("ANEKI2A") != string::npos
+			|| sidName.find("SULUS2A") != string::npos
+			|| sidName.find("MARUN7S") != string::npos
+			|| sidName.find("TOBAK9S") != string::npos
+			|| sidName.find("ULKIG2S") != string::npos
 			)
 		{
 			DisplayUserMessage(GetPlugInName(), "GCA_temp", message.append("4000ft").c_str(), true, false, false, true, false);
@@ -394,17 +493,21 @@ string CGermanControllerAssist::getTagItemSIDCLIMB(CFlightPlan FlightPlan)
 		return  "";
 	}
 	//quick and dirty method
-	if (origin == "EDDS")
+	if (origin == "EDDK" || origin == "EDDS" || origin == "EDDL" || origin == "EDDH" || origin == "EDDG" || origin == "EDLW")
 	{
 		return "5000";
 	}
-	if (origin == "EDDK")
+	if (origin == "EDDW")
 	{
-		return "5000";
+		return "4000";
 	}
-	if (origin == "EDDL")
+	if (origin == "EDLN")
 	{
-		return "5000";
+		return "2000";
+	}
+	if (origin == "EDDC" || origin == "EDDP")
+	{
+		return "7000";
 	}
 	if (origin != "EDDF")
 	{
@@ -446,6 +549,7 @@ string CGermanControllerAssist::getTagItemSIDCLIMB(CFlightPlan FlightPlan)
 		|| sidName == "MARUN7N"
 		|| sidName == "TOBAK9N"
 		|| sidName == "ANEKI9F"
+		|| sidName == "SOBRA5P"
 		)
 	{
 		return "5000";
@@ -459,10 +563,10 @@ string CGermanControllerAssist::getTagItemSIDCLIMB(CFlightPlan FlightPlan)
 		|| sidName == "ANEKI2A"
 		|| sidName == "ANEKI1X"
 		|| sidName == "ANEKI1Y"
-		|| sidName == "CINDY2S"
+		|| sidName == "CINDY3S"
 		|| sidName == "CINDY1X"
 		|| sidName == "CINDY1Y"
-		|| sidName == "SULUS1S"
+		|| sidName == "SULUS2S"
 		|| sidName == "SULUS1D"
 		|| sidName == "SULUS9L"
 		|| sidName == "OBOKA1R"
@@ -472,6 +576,15 @@ string CGermanControllerAssist::getTagItemSIDCLIMB(CFlightPlan FlightPlan)
 		|| sidName == "MARUN4T"
 		|| sidName == "TOBAK6T"
 		|| sidName == "OBOKA1L"
+		|| sidName == "ANEKI4E"
+		|| sidName == "SOBRA6E"
+		|| sidName == "KOMIB3D"
+		|| sidName == "CINDY1A"
+		|| sidName == "ANEKI2A"
+		|| sidName == "SULUS2A"
+		|| sidName == "MARUN7S"
+		|| sidName == "ULKIG2S"
+		|| sidName == "TOBAK9S"
 		)
 	{
 		return "4000";
